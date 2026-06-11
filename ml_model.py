@@ -51,9 +51,9 @@ MAINTENANCE_MODEL_FILE    = "model_maintenance.pkl"
 ENCODER_FILE              = "label_encoder.pkl"
 
 # Maintenance triggered when ANY of these thresholds are exceeded
-MAINTENANCE_PPM_THRESHOLD  = 500
-MAINTENANCE_HUM_THRESHOLD  = 75
-MAINTENANCE_TEMP_THRESHOLD = 50
+MAINTENANCE_PPM_THRESHOLD  = 300
+MAINTENANCE_HUM_THRESHOLD  = 65
+MAINTENANCE_TEMP_THRESHOLD = 40
 
 # ─────────────────────────────────────────────
 #  Actual column names from your Google Sheet

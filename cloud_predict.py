@@ -16,6 +16,11 @@ import firebase_admin
 from firebase_admin import credentials, db
 from google.oauth2.service_account import Credentials
 from sklearn.ensemble import RandomForestClassifier
+with open("serviceAccountKey.json", "w") as f:
+    f.write(os.environ["FIREBASE_KEY"])
+
+with open("google_sheets_cred.json", "w") as f:
+    f.write(os.environ["GSHEETS_KEY"])
 
 # ─────────────────────────────────────────────
 #  Config
@@ -40,8 +45,8 @@ AIR_QUALITY_MODEL_FILE = "model_air_quality.pkl"
 MAINTENANCE_MODEL_FILE = "model_maintenance.pkl"
 ENCODER_FILE           = "label_encoder.pkl"
 
-MAINTENANCE_PPM_THRESHOLD  = 600
-MAINTENANCE_HUM_THRESHOLD  = 75
+MAINTENANCE_PPM_THRESHOLD  = 400
+MAINTENANCE_HUM_THRESHOLD  = 65
 MAINTENANCE_TEMP_THRESHOLD = 40
 
 # ─────────────────────────────────────────────
@@ -197,14 +202,17 @@ def main():
         recommendation = "NORMAL"
         led_signal     = "GREEN"
 
+    # Add these two fields to the prediction dict
     prediction = {
-        "AirQuality":          air_pred,
+        "AirQuality":           air_pred,
         "AirQualityConfidence": air_conf,
-        "MaintenanceNeeded":   maint_pred,
+        "MaintenanceNeeded":    maint_pred,
         "MaintenanceConfidence": maint_conf,
-        "Recommendation":      recommendation,
-        "LEDSignal":           led_signal,
-        "LastPredicted":       datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S") + " UTC"
+        "Recommendation":       recommendation,
+        "LEDSignal":            led_signal,
+        "LEDOnDuration":        30,   # ON for 5 minutes (seconds)
+        "LEDOffDuration":       30,   # OFF for 5 minutes (seconds)
+        "LastPredicted":        (datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30)).strftime("%Y-%m-%d %H:%M:%S") + " IST"
     }
 
     # ── Push to Firebase ──
