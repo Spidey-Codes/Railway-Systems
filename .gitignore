@@ -1,0 +1,13 @@
+# Secret credential files - NEVER push these
+serviceAccountKey.json
+google_sheets_cred.json
+railwayssystem-bbe8a-*.json
+
+# Output files
+predictions_output.xlsx
+railway_washroom_gas_log.xlsx
+washroom_predictions.png
+
+# Python cache
+__pycache__/
+*.pyc
