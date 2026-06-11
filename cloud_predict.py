@@ -69,7 +69,6 @@ def init_firebase():
 
 
 def load_latest_from_sheets(n_rows=50):
-    """Load the last N rows from Google Sheets for prediction."""
     scopes = [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive",
@@ -82,13 +81,33 @@ def load_latest_from_sheets(n_rows=50):
     if len(rows) < 2:
         raise ValueError("No data in Google Sheet")
 
-    header    = [h for h in rows[0] if h.strip() != ""]
-    data_rows = rows[1:]
-    df        = pd.DataFrame(data_rows, columns=rows[0])
-    df        = df[header]
+    # Strip blank column names
+    header = [h for h in rows[0] if h.strip() != ""]
+    df     = pd.DataFrame(rows[1:], columns=rows[0])
+    df     = df[header]
+    df     = df.tail(n_rows).copy()
 
-    # Get last N rows only
-    df = df.tail(n_rows).copy()
+    # Handle both old and new column names for PPM
+    if "PPM" in df.columns:
+        df.rename(columns={"PPM": COL_PPM}, inplace=True)
+    elif "Gas Value (ppm)" in df.columns:
+        df.rename(columns={"Gas Value (ppm)": COL_PPM}, inplace=True)
+    else:
+        raise ValueError(f"No PPM column found. Available columns: {df.columns.tolist()}")
+
+    # Handle both old and new column names for Temp and Humidity
+    if "Temperature (°C)" not in df.columns and "Temperature" in df.columns:
+        df.rename(columns={"Temperature": COL_TEMP}, inplace=True)
+    if "Humidity (%)" not in df.columns and "Humidity" in df.columns:
+        df.rename(columns={"Humidity": COL_HUM}, inplace=True)
+
+    # If Temp/Humidity still missing, fill with defaults so model doesn't crash
+    if COL_TEMP not in df.columns:
+        print("[WARN] Temperature column missing — using default 30.0")
+        df[COL_TEMP] = 30.0
+    if COL_HUM not in df.columns:
+        print("[WARN] Humidity column missing — using default 50.0")
+        df[COL_HUM] = 50.0
 
     df[COL_PPM]  = pd.to_numeric(df[COL_PPM],  errors="coerce")
     df[COL_TEMP] = pd.to_numeric(df[COL_TEMP], errors="coerce")
