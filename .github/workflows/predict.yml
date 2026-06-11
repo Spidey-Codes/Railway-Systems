@@ -1,9 +1,9 @@
-name: Railway Washroom – Auto Predict
+name: Railway Washroom - Auto Predict
 
 on:
   schedule:
-	- cron: "0,10,20,30,40,50 * * * *"   # Every 10 min at fixed times
-  workflow_dispatch:           # Also allows manual trigger from GitHub UI
+    - cron: "0,10,20,30,40,50 * * * *"
+  workflow_dispatch:
 
 jobs:
   predict:
