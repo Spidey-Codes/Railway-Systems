@@ -197,14 +197,17 @@ def main():
         recommendation = "NORMAL"
         led_signal     = "GREEN"
 
+    # Add these two fields to the prediction dict
     prediction = {
-        "AirQuality":          air_pred,
+        "AirQuality":           air_pred,
         "AirQualityConfidence": air_conf,
-        "MaintenanceNeeded":   maint_pred,
+        "MaintenanceNeeded":    maint_pred,
         "MaintenanceConfidence": maint_conf,
-        "Recommendation":      recommendation,
-        "LEDSignal":           led_signal,
-        "LastPredicted":       datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S") + " UTC"
+        "Recommendation":       recommendation,
+        "LEDSignal":            led_signal,
+        "LEDOnDuration":        30,   # ON for 5 minutes (seconds)
+        "LEDOffDuration":       30,   # OFF for 5 minutes (seconds)
+        "LastPredicted":        (datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30)).strftime("%Y-%m-%d %H:%M:%S") + " IST"
     }
 
     # ── Push to Firebase ──
