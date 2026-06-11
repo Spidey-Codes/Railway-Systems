@@ -21,7 +21,7 @@ from sklearn.ensemble import RandomForestClassifier
 #  Config
 # ─────────────────────────────────────────────
 GOOGLE_SHEET_NAME     = "Railways Washroom Data"
-GOOGLE_WORKSHEET_NAME = "Gas Data"
+GOOGLE_WORKSHEET_NAME = "Data"
 FIREBASE_DATABASE_URL = "https://railwayssystem-bbe8a-default-rtdb.asia-southeast1.firebasedatabase.app/"
 
 COL_TIMESTAMP   = "Timestamp"
