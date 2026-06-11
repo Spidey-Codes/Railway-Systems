@@ -1,0 +1,21 @@
+$date
+	Sun Dec 14 21:00:10 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module inst_mem_tb $end
+$var reg 32 ! tb_inst [31:0] $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+bx !
+$end
+#50000

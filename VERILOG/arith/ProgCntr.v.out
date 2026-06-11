@@ -1,0 +1,54 @@
+#! /c/Source/iverilog-install/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1539-g2693dd32b)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "C:\iverilog\lib\ivl\system.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_sys.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_textio.vpi";
+:vpi_module "C:\iverilog\lib\ivl\v2005_math.vpi";
+:vpi_module "C:\iverilog\lib\ivl\va_math.vpi";
+S_000001ebc63e6830 .scope module, "ProgCntr" "ProgCntr" 2 1;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "clk";
+    .port_info 1 /INPUT 1 "rst";
+    .port_info 2 /INPUT 1 "PC_Write";
+    .port_info 3 /INPUT 32 "Next_PC";
+    .port_info 4 /OUTPUT 32 "PC";
+P_000001ebc63e8620 .param/l "Start_Add" 1 2 9, C4<00000000000000000000000000000000>;
+o000001ebc6316fb8 .functor BUFZ 32, C4<zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz>; HiZ drive
+v000001ebc63e6d80_0 .net "Next_PC", 31 0, o000001ebc6316fb8;  0 drivers
+v000001ebc63e69c0_0 .var "PC", 31 0;
+o000001ebc6317018 .functor BUFZ 1, C4<z>; HiZ drive
+v000001ebc63e6a60_0 .net "PC_Write", 0 0, o000001ebc6317018;  0 drivers
+o000001ebc6317048 .functor BUFZ 1, C4<z>; HiZ drive
+v000001ebc63e6b00_0 .net "clk", 0 0, o000001ebc6317048;  0 drivers
+o000001ebc6317078 .functor BUFZ 1, C4<z>; HiZ drive
+v000001ebc63eed70_0 .net "rst", 0 0, o000001ebc6317078;  0 drivers
+E_000001ebc63e83e0/0 .event negedge, v000001ebc63eed70_0;
+E_000001ebc63e83e0/1 .event posedge, v000001ebc63e6b00_0;
+E_000001ebc63e83e0 .event/or E_000001ebc63e83e0/0, E_000001ebc63e83e0/1;
+    .scope S_000001ebc63e6830;
+T_0 ;
+    %wait E_000001ebc63e83e0;
+    %load/vec4 v000001ebc63eed70_0;
+    %nor/r;
+    %flag_set/vec4 8;
+    %jmp/0xz  T_0.0, 8;
+    %pushi/vec4 0, 0, 32;
+    %assign/vec4 v000001ebc63e69c0_0, 0;
+    %jmp T_0.1;
+T_0.0 ;
+    %load/vec4 v000001ebc63e6a60_0;
+    %flag_set/vec4 8;
+    %jmp/0xz  T_0.2, 8;
+    %load/vec4 v000001ebc63e6d80_0;
+    %store/vec4 v000001ebc63e69c0_0, 0, 32;
+T_0.2 ;
+T_0.1 ;
+    %jmp T_0;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "ProgCntr.v";

@@ -1,0 +1,48 @@
+#! /c/Source/iverilog-install/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1539-g2693dd32b)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "C:\iverilog\lib\ivl\system.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_sys.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_textio.vpi";
+:vpi_module "C:\iverilog\lib\ivl\v2005_math.vpi";
+:vpi_module "C:\iverilog\lib\ivl\va_math.vpi";
+S_000001fffe5866d0 .scope module, "Instruction_Mem" "Instruction_Mem" 2 1;
+ .timescale 0 0;
+    .port_info 0 /INPUT 32 "address_i";
+    .port_info 1 /INPUT 32 "instruction_o";
+P_000001fffe586ee0 .param/l "Add_width" 1 2 6, +C4<00000000000000000000000000001010>;
+P_000001fffe586f18 .param/l "Mem_Depth" 1 2 5, +C4<00000000000000000000010000000000>;
+v000001fffe589750_0 .net *"_ivl_10", 31 0, L_000001fffe6a2f20;  1 drivers
+v000001fffe58dc20_0 .net *"_ivl_12", 11 0, L_000001fffe6a2c00;  1 drivers
+L_000001fffe6ebcd8 .functor BUFT 1, C4<00>, C4<0>, C4<0>, C4<0>;
+v000001fffe5899a0_0 .net *"_ivl_15", 1 0, L_000001fffe6ebcd8;  1 drivers
+L_000001fffe6ebd20 .functor BUFT 1, C4<00000000000000000000000000000000>, C4<0>, C4<0>, C4<0>;
+v000001fffe589a40_0 .net/2u *"_ivl_16", 31 0, L_000001fffe6ebd20;  1 drivers
+v000001fffe58bcb0_0 .net *"_ivl_2", 31 0, L_000001fffe6a34c0;  1 drivers
+L_000001fffe6ebc48 .functor BUFT 1, C4<0000000000000000000000>, C4<0>, C4<0>, C4<0>;
+v000001fffe58bd50_0 .net *"_ivl_5", 21 0, L_000001fffe6ebc48;  1 drivers
+L_000001fffe6ebc90 .functor BUFT 1, C4<00000000000000000000010000000000>, C4<0>, C4<0>, C4<0>;
+v000001fffe58bdf0_0 .net/2u *"_ivl_6", 31 0, L_000001fffe6ebc90;  1 drivers
+o000001fffe6a7128 .functor BUFZ 32, C4<zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz>; HiZ drive
+v000001fffe58be90_0 .net "address_i", 31 0, o000001fffe6a7128;  0 drivers
+v000001fffe586860_0 .net "instruction_o", 31 0, L_000001fffe6a2de0;  1 drivers
+v000001fffe586900 .array "mem", 1023 0, 31 0;
+v000001fffe5869a0_0 .net "read_index", 9 0, L_000001fffe6a3600;  1 drivers
+v000001fffe6a2e80_0 .net "valid_address", 0 0, L_000001fffe6a3380;  1 drivers
+L_000001fffe6a3600 .part o000001fffe6a7128, 2, 10;
+L_000001fffe6a34c0 .concat [ 10 22 0 0], L_000001fffe6a3600, L_000001fffe6ebc48;
+L_000001fffe6a3380 .cmp/gt 32, L_000001fffe6ebc90, L_000001fffe6a34c0;
+L_000001fffe6a2f20 .array/port v000001fffe586900, L_000001fffe6a2c00;
+L_000001fffe6a2c00 .concat [ 10 2 0 0], L_000001fffe6a3600, L_000001fffe6ebcd8;
+L_000001fffe6a2de0 .functor MUXZ 32, L_000001fffe6ebd20, L_000001fffe6a2f20, L_000001fffe6a3380, C4<>;
+    .scope S_000001fffe5866d0;
+T_0 ;
+    %vpi_call 2 13 "$readmemh", "program.mem", v000001fffe586900, 32'sb00000000000000000000000000000000, 32'sb00000000000000000000001111111111 {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "Instruction_Mem.v";

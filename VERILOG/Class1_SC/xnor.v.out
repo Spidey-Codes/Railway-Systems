@@ -1,0 +1,27 @@
+#! /c/Source/iverilog-install/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1539-g2693dd32b)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision - 12;
+:vpi_module "C:\iverilog\lib\ivl\system.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_sys.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_textio.vpi";
+:vpi_module "C:\iverilog\lib\ivl\v2005_math.vpi";
+:vpi_module "C:\iverilog\lib\ivl\va_math.vpi";
+S_000001a5054c66c0 .scope module, "XNOR" "XNOR" 2 2;
+ .timescale -9 -12;
+    .port_info 0 /INPUT 16 "A";
+    .port_info 1 /INPUT 16 "B";
+    .port_info 2 /OUTPUT 16 "Output7";
+o000001a5055e6a18 .functor BUFZ 16, C4<zzzzzzzzzzzzzzzz>; HiZ drive
+o000001a5055e6a48 .functor BUFZ 16, C4<zzzzzzzzzzzzzzzz>; HiZ drive
+L_000001a5054c6ad0 .functor XOR 16, o000001a5055e6a18, o000001a5055e6a48, C4<0000000000000000>, C4<0000000000000000>;
+L_000001a5054c6ff0 .functor NOT 16, L_000001a5054c6ad0, C4<0000000000000000>, C4<0000000000000000>, C4<0000000000000000>;
+v000001a5054c6850_0 .net "A", 15 0, o000001a5055e6a18;  0 drivers
+v000001a5054c68f0_0 .net "B", 15 0, o000001a5055e6a48;  0 drivers
+v000001a5054c6990_0 .net "Output7", 15 0, L_000001a5054c6ff0;  1 drivers
+v000001a5054c6a30_0 .net *"_ivl_0", 15 0, L_000001a5054c6ad0;  1 drivers
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "xnor.v";
