@@ -58,6 +58,8 @@ MAINTENANCE_TEMP_THRESHOLD = 50
 # ─────────────────────────────────────────────
 #  Actual column names from your Google Sheet
 # ─────────────────────────────────────────────
+# Replace the column constants section in BOTH ml_model.py and cloud_predict.py
+
 COL_TIMESTAMP   = "Timestamp"
 COL_PPM         = "PPM"
 COL_TEMP        = "Temperature (°C)"
@@ -65,7 +67,10 @@ COL_HUM         = "Humidity (%)"
 COL_AIR_QUALITY = "Air Quality"
 COL_ALERT       = "Alert Level"
 COL_ESP_STATUS  = "ESP32 Status"
-HAS_TEMP_HUM    = True
+COL_PIR_STATUS  = "PIR Status"
+COL_PIR_FLAG    = "PIR Flag"
+COL_DISTANCE    = "Distance (cm)"
+COL_OCCUPANCY   = "Occupancy"
 
 # Temperature and Humidity are not in your sheet yet —
 # model will use PPM + hour/minute only until you add them
@@ -135,8 +140,23 @@ def add_maintenance_label(df):
 
 
 def get_features(df):
-    # Features: PPM, Hour, Minute
-    return df[[COL_PPM, "Hour", "Minute"]].values
+    return df[[COL_PPM, COL_TEMP, COL_HUM,
+               COL_PIR_FLAG, COL_DISTANCE,
+               "Hour", "Minute"]].values
+
+def add_maintenance_label(df):
+    df = df.copy()
+    df[COL_TEMP]     = pd.to_numeric(df[COL_TEMP],     errors="coerce")
+    df[COL_HUM]      = pd.to_numeric(df[COL_HUM],      errors="coerce")
+    df[COL_DISTANCE] = pd.to_numeric(df[COL_DISTANCE], errors="coerce")
+    df[COL_PIR_FLAG]  = pd.to_numeric(df[COL_PIR_FLAG],  errors="coerce")
+    df["Maintenance Needed"] = (
+        (df[COL_PPM]      >= MAINTENANCE_PPM_THRESHOLD)  |
+        (df[COL_HUM]      >= MAINTENANCE_HUM_THRESHOLD)  |
+        (df[COL_TEMP]     >= MAINTENANCE_TEMP_THRESHOLD) |
+        (df[COL_DISTANCE] <= 10)   # bin full
+    ).map({True: "Yes", False: "No"})
+    return df
 
 
 # ─────────────────────────────────────────────
@@ -160,7 +180,7 @@ def train():
     print("[2/5] Engineering features...")
     df = extract_time_features(df)
     df = add_maintenance_label(df)
-    df.dropna(subset=[COL_PPM, COL_TEMP, COL_HUM, COL_AIR_QUALITY], inplace=True)
+    df.dropna(subset=[COL_PPM, COL_TEMP, COL_HUM, COL_PIR_FLAG, COL_DISTANCE, COL_AIR_QUALITY], inplace=True)
     print(f"      {len(df)} clean rows after dropping nulls")
 
     X = get_features(df)
@@ -213,7 +233,7 @@ def train():
 
     # ── Feature importance ──
     # Feature importance
-# features = [COL_PPM, "Hour", "Minute"]
+    features = [COL_PPM, COL_TEMP, COL_HUM, COL_PIR_FLAG, COL_DISTANCE, "Hour", "Minute"]
 
 # importance = pd.Series(
 #     rf_air.feature_importances_,
@@ -260,7 +280,7 @@ def predict():
     # ── Features ──
     print("[3/4] Preparing features...")
     df = extract_time_features(df)
-    df.dropna(subset=[COL_PPM, COL_TEMP, COL_HUM], inplace=True)
+    df.dropna(subset=[COL_PPM, COL_TEMP, COL_HUM, COL_PIR_FLAG, COL_DISTANCE], inplace=True)
     X = get_features(df)
 
     # ── Predict ──

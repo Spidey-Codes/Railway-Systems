@@ -29,6 +29,12 @@ COL_PPM         = "PPM"
 COL_TEMP        = "Temperature (°C)"
 COL_HUM         = "Humidity (%)"
 COL_AIR_QUALITY = "Air Quality"
+COL_ALERT       = "Alert Level"
+COL_ESP_STATUS  = "ESP32 Status"
+COL_PIR_STATUS  = "PIR Status"
+COL_PIR_FLAG    = "PIR Flag"
+COL_DISTANCE    = "Distance (cm)"
+COL_OCCUPANCY   = "Occupancy"
 
 AIR_QUALITY_MODEL_FILE = "model_air_quality.pkl"
 MAINTENANCE_MODEL_FILE = "model_maintenance.pkl"
@@ -109,9 +115,11 @@ def load_latest_from_sheets(n_rows=50):
         print("[WARN] Humidity column missing — using default 50.0")
         df[COL_HUM] = 50.0
 
-    df[COL_PPM]  = pd.to_numeric(df[COL_PPM],  errors="coerce")
-    df[COL_TEMP] = pd.to_numeric(df[COL_TEMP], errors="coerce")
-    df[COL_HUM]  = pd.to_numeric(df[COL_HUM],  errors="coerce")
+    df[COL_PPM]      = pd.to_numeric(df[COL_PPM],      errors="coerce")
+    df[COL_TEMP]     = pd.to_numeric(df[COL_TEMP],      errors="coerce")
+    df[COL_HUM]      = pd.to_numeric(df[COL_HUM],       errors="coerce")
+    df[COL_PIR_FLAG]  = pd.to_numeric(df[COL_PIR_FLAG],   errors="coerce")
+    df[COL_DISTANCE] = pd.to_numeric(df[COL_DISTANCE],  errors="coerce")
 
     print(f"[Sheets] Loaded last {len(df)} rows ✓")
     return df
@@ -126,7 +134,9 @@ def extract_time_features(df):
 
 
 def get_features(df):
-    return df[[COL_PPM, COL_TEMP, COL_HUM, "Hour", "Minute"]].values
+    return df[[COL_PPM, COL_TEMP, COL_HUM,
+               COL_PIR_FLAG, COL_DISTANCE,
+               "Hour", "Minute"]].values
 
 
 def push_prediction_to_firebase(prediction):
@@ -160,7 +170,7 @@ def main():
     print("[2/4] Loading latest data from Google Sheets...")
     df = load_latest_from_sheets(n_rows=50)
     df = extract_time_features(df)
-    df.dropna(subset=[COL_PPM, COL_TEMP, COL_HUM], inplace=True)
+    df.dropna(subset=[COL_PPM, COL_TEMP, COL_HUM, COL_PIR_FLAG, COL_DISTANCE], inplace=True)
 
     if len(df) == 0:
         raise ValueError("No valid rows after dropping nulls")
