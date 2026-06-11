@@ -16,6 +16,11 @@ import firebase_admin
 from firebase_admin import credentials, db
 from google.oauth2.service_account import Credentials
 from sklearn.ensemble import RandomForestClassifier
+with open("serviceAccountKey.json", "w") as f:
+    f.write(os.environ["FIREBASE_KEY"])
+
+with open("google_sheets_cred.json", "w") as f:
+    f.write(os.environ["GSHEETS_KEY"])
 
 # ─────────────────────────────────────────────
 #  Config
