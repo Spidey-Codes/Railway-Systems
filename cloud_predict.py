@@ -40,9 +40,9 @@ AIR_QUALITY_MODEL_FILE = "model_air_quality.pkl"
 MAINTENANCE_MODEL_FILE = "model_maintenance.pkl"
 ENCODER_FILE           = "label_encoder.pkl"
 
-MAINTENANCE_PPM_THRESHOLD  = 50
-MAINTENANCE_HUM_THRESHOLD  = 25
-MAINTENANCE_TEMP_THRESHOLD = 20
+MAINTENANCE_PPM_THRESHOLD  = 400
+MAINTENANCE_HUM_THRESHOLD  = 65
+MAINTENANCE_TEMP_THRESHOLD = 40
 
 # ─────────────────────────────────────────────
 #  Load credentials from GitHub Secrets
