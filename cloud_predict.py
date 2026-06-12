@@ -210,8 +210,8 @@ def main():
         "MaintenanceConfidence": maint_conf,
         "Recommendation":       recommendation,
         "LEDSignal":            led_signal,
-        "LEDOnDuration":        30,   # ON for 5 minutes (seconds)
-        "LEDOffDuration":       30,   # OFF for 5 minutes (seconds)
+        "LEDOnDuration":        300,   # ON for 5 minutes (seconds)
+        "LEDOffDuration":       300,   # OFF for 5 minutes (seconds)
         "LastPredicted":        (datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30)).strftime("%Y-%m-%d %H:%M:%S") + " IST"
     }
 
